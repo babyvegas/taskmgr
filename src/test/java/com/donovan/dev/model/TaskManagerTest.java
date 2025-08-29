@@ -2,6 +2,12 @@ package com.donovan.dev.model;
 
 import org.junit.jupiter.api.Test;
 
+import java.sql.Timestamp;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class TaskManagerTest {
 
     @Test
@@ -35,6 +41,50 @@ public class TaskManagerTest {
         assert(taskManager.getAllTasks().get(0).getDescription().equals("Test Task 1"));
         assert(taskManager.getAllTasks().get(1).getDescription().equals("Test Task 2"));
         assert(taskManager.getAllTasks().get(1).getId().equals("2"));
+    }
+
+    @Test
+    void shouldClearTasks(){
+        TaskManager taskManager = new TaskManager();
+        Task task1 = new Task("1", "New Task", false, new java.sql.Timestamp(System.currentTimeMillis()));
+
+        taskManager.clearTasks();
+
+        assertEquals(0, taskManager.getAllTasks().size());
+    }
+
+    @Test
+    void shouldRemoveTaskbyId(){
+        TaskManager taskManager = new TaskManager();
+        Task task1 = new Task("1", "New Task", false, new java.sql.Timestamp(System.currentTimeMillis()));
+
+        taskManager.removeTaskById("1");
+
+        assertEquals(0, taskManager.getAllTasks().size());
+    }
+
+    @Test
+    void shouldMarkTaskAsCompleted(){
+        TaskManager taskManager = new TaskManager();
+        Task task1 = new Task("1", "New Task", false, new java.sql.Timestamp(System.currentTimeMillis()));
+
+        taskManager.addTask(task1);
+        taskManager.markTaskAsCompleted("1");
+
+        List<Task> tasks = taskManager.getAllTasks();
+        Task taskAfterMark = tasks.get(0);
+
+        assertTrue(taskAfterMark.isCompleted());
+    }
+
+    @Test
+    void shouldListTasks(){
+        TaskManager taskManager = new TaskManager();
+        Task task1 = new Task("1", "New Task", false, new java.sql.Timestamp(System.currentTimeMillis()));
+
+        taskManager.addTask(task1);
+        taskManager.listTasks();
+
     }
 
 }

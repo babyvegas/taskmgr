@@ -16,6 +16,7 @@ public class TaskManager {
         return tasks;
     }
 
+
     public void addTask(Task task) {
         Task newTask = new Task();
         if(tasks.isEmpty()){
@@ -28,5 +29,39 @@ public class TaskManager {
         newTask.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
         newTask.setDescription(task.getDescription());
         tasks.add(newTask);
+    }
+
+    public void clearTasks() {
+        tasks.clear();
+    }
+
+    public void removeTaskById(String id) {
+        tasks.removeIf(task -> task.getId().equals(id));
+    }
+
+    public void markTaskAsCompleted(String id) {
+        for (Task task : tasks) {
+            if (task.getId().equals(id)) {
+                task.setCompleted(true);
+                break;
+            }
+        }
+    }
+
+    public void listTasks(){
+        if(tasks.isEmpty()){
+            System.out.println("You don't have any task pending, congrats!");
+        }
+        for(Task task : tasks){
+            System.out.println("Task Id:" + task.getId());
+            System.out.println("Task Description:" + task.getDescription());
+            System.out.println("Created:" + task.getCreatedAt());
+            if(task.isCompleted()){
+                System.out.println("This task is completed!");
+            } else {
+                System.out.println("Pending!");
+            }
+            System.out.println("-------------------------------------------");
+        }
     }
 }
