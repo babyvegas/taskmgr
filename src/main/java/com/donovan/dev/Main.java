@@ -33,14 +33,15 @@ public class Main {
                     break;
                 case "3":
                     System.out.println("Which task you want to complete?");
-                    Scanner scanner1 = new Scanner(System.in);
-                    String id = scanner1.nextLine();
+                    String id = scanner.nextLine();
                     taskManager.markTaskAsCompleted(id);
                     exit = false;
                     break;
                 case "4":
                     exit = true;
+                    break;
                 default:
+                    System.out.println("Invalid option, try again.");
                     break;
             }
         }

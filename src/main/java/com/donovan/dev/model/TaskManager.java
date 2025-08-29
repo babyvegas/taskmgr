@@ -53,15 +53,9 @@ public class TaskManager {
             System.out.println("You don't have any task pending, congrats!");
         }
         for(Task task : tasks){
-            System.out.println("Task Id:" + task.getId());
-            System.out.println("Task Description:" + task.getDescription());
-            System.out.println("Created:" + task.getCreatedAt());
-            if(task.isCompleted()){
-                System.out.println("This task is completed!");
-            } else {
-                System.out.println("Pending!");
-            }
-            System.out.println("-------------------------------------------");
+            String status = task.isCompleted() ? "[x]" : "[]";
+            System.out.printf("%s (%s) %s - created %s%n",
+                    status, task.getId(), task.getDescription(), task.getCreatedAt());
         }
     }
 }
