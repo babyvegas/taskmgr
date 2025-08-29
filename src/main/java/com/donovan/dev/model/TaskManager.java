@@ -40,11 +40,16 @@ public class TaskManager {
     }
 
     public void markTaskAsCompleted(String id) {
+        boolean found = false;
         for (Task task : tasks) {
             if (task.getId().equals(id)) {
                 task.setCompleted(true);
+                found = true;
                 break;
             }
+        }
+        if (!found){
+            System.out.printf("Couldn't find a task with id %s\n", id);
         }
     }
 
