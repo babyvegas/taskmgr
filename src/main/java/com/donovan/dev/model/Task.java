@@ -1,12 +1,18 @@
 package com.donovan.dev.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.sql.Timestamp;
 
 public class Task {
 
+    @JsonProperty("id")
     private String id;
+    @JsonProperty("description")
     private String description;
+    @JsonProperty("status")
     private boolean isCompleted;
+    @JsonProperty("started_date")
     private Timestamp createdAt;
 
     public Task(){
@@ -49,5 +55,10 @@ public class Task {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString(){
+        return "Task{id=" + id + ", title='" + description + "', completed=" + isCompleted + "}";
     }
 }

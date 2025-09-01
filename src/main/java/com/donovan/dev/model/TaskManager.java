@@ -1,15 +1,44 @@
 package com.donovan.dev.model;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.donovan.dev.constants.Constants;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 public class TaskManager {
-    private final List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
+    private Gson gson = new Gson();
 
     public TaskManager() {
-        this.tasks = new ArrayList<>();
+        loadTasks();
+    }
+
+    // load tasks from local file
+    private void loadTasks(){
+        try (FileReader fileReader = new FileReader(Constants.JSON_FILE_NAME)) {
+            Type taskListType = new TypeToken<ArrayList<Task>>(){}.getType();
+            tasks = gson.fromJson(fileReader, taskListType);
+            if (tasks == null) tasks = new ArrayList<>();
+        } catch (IOException e) {
+            tasks = new ArrayList<>();
+        }
+    }
+
+    // save tasks to local file
+    private void saveTasks(){
+        try(FileWriter fileWriter = new FileWriter(Constants.JSON_FILE_NAME)) {
+            gson.toJson(tasks, fileWriter);
+        } catch (IOException e ){
+            System.out.println("Error saving tasks: " + e.getMessage());
+        }
     }
 
     public List<Task> getAllTasks() {
@@ -29,6 +58,7 @@ public class TaskManager {
         newTask.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
         newTask.setDescription(task.getDescription());
         tasks.add(newTask);
+        saveTasks();
     }
 
     public void clearTasks() {
@@ -37,6 +67,7 @@ public class TaskManager {
 
     public void removeTaskById(String id) {
         tasks.removeIf(task -> task.getId().equals(id));
+        saveTasks();
     }
 
     public void markTaskAsCompleted(String id) {
@@ -51,6 +82,7 @@ public class TaskManager {
         if (!found){
             System.out.printf("Couldn't find a task with id %s\n", id);
         }
+        saveTasks();
     }
 
     public void listTasks(){
